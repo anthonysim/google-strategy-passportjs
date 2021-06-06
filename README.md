@@ -24,6 +24,8 @@ Start App:
 
 - Node/Express
 - EJS
+- Express Sessions
+- Bootstrap
 
 ## Directions
 1. Install passport and google oauth.

@@ -101,6 +101,7 @@ app.get('/protected', isSignedIn, function (req, res) {
 ```
 
 6. Set your failure & logout routes.
+
 Example:
 ```
 // failure

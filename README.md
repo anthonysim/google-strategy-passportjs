@@ -73,8 +73,8 @@ app.get('/auth/google/callback',
 
 4. Specify your routes and create a middleware function to test if you are signed in or not.
 
-Example:
 ```
+Example:
 exports.isSignedIn = (req, res, next) => {
   // if they are not signed in
   if (!req.user) {
@@ -90,8 +90,8 @@ exports.isSignedIn = (req, res, next) => {
 
 5. Add the middleware function to test if you are signed in or not to your protected routes.
 
-Example:
 ```
+Example:
 // // protected page
 app.get('/protected', isSignedIn, function (req, res) {
   res.render('pages/protected', {
@@ -102,8 +102,8 @@ app.get('/protected', isSignedIn, function (req, res) {
 
 6. Set your failure & logout routes.
 
-Example:
 ```
+Example:
 // failure
 app.get('/auth/google/failure', (req, res) => {
   res.send('Failed to authenticate..');

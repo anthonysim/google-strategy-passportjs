@@ -3,7 +3,7 @@ const session = require('express-session');
 const app = express();
 const passport = require('passport');
 // const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const { isLoggedIn } = require('./middleware/isLoggedIn');
+const { isSignedIn } = require('./middleware/isSignedIn');
 const dotenv = require('dotenv');
 
 // config
@@ -20,19 +20,10 @@ app.set('view engine', 'ejs');
 //   //   maxAge: 20000
 //   // }
 // }));
-// app.use(passport.initialize());
-// app.use(passport.session());
 
 // ========== GOOGLE STRATEGY ============
-// passport.use(new GoogleStrategy({
-//   clientID: process.env.GOOGLE_CLIENT_ID,
-//   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//   callbackURL: 'http://localhost:3000/google/callback'
-// },
-//   function (accessToken, refreshToken, profile, done) {
-//     return done(null, profile);
-//   }
-// ));
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // passport.serializeUser(function (user, done) {
 //   done(null, user)
@@ -45,6 +36,16 @@ app.set('view engine', 'ejs');
 // app.get('/auth/google',
 //   passport.authenticate('google', { scope: ['email', 'profile'] }
 //   ));
+
+// passport.use(new GoogleStrategy({
+//   clientID: process.env.GOOGLE_CLIENT_ID,
+//   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+//   callbackURL: 'http://localhost:3000/auth/google/callback'
+// },
+//   function (accessToken, refreshToken, profile, done) {
+//     return done(null, profile);
+//   }
+// ));
 
 // app.get('/auth/google/callback',
 //   passport.authenticate('google', {
@@ -64,20 +65,23 @@ app.get('/', function (req, res) {
   res.render('pages/index');
 });
 
-// about page
-app.get('/protected', function (req, res) {
+// // protected page
+app.get('/protected', isSignedIn, function (req, res) {
+  console.log(res)
   res.render('pages/protected');
 });
 
-
+// failure
 app.get('/auth/google/failure', (req, res) => {
   res.send('Failed to authenticate..');
 });
 
-app.get('/logout', (req, res) => {
+// logout
+app.get('/signout', isSignedIn, (req, res) => {
   req.logout();
   req.session.destroy();
-  res.send('Goodbye!');
+  console.log('Goodbye!');
+  res.redirect('/');
 });
 
 

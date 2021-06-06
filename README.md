@@ -28,6 +28,7 @@ Start App:
 ## Directions
 1. Install passport and google oauth.
 ```
+npm install passport
 npm install passport-google-oauth
 ```
 

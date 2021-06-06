@@ -1,15 +1,13 @@
-const express = require('express')
-const session = require('express-session')
+const express = require('express');
+const session = require('express-session');
 const app = express();
-const passport = require('passport')
+const passport = require('passport');
+// const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const { isLoggedIn } = require('./middleware/isLoggedIn');
 const dotenv = require('dotenv');
-const { isLoggedIn } = require('./middleware/isLoggedIn')
 
 // config
 dotenv.config({ path: './__config__/cofig.env' })
-
-// GOOGLE Strategy
-require('./auth');
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -25,20 +23,23 @@ app.set('view engine', 'ejs');
 // app.use(passport.initialize());
 // app.use(passport.session());
 
+// ========== GOOGLE STRATEGY ============
+// passport.use(new GoogleStrategy({
+//   clientID: process.env.GOOGLE_CLIENT_ID,
+//   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+//   callbackURL: 'http://localhost:3000/google/callback'
+// },
+//   function (accessToken, refreshToken, profile, done) {
+//     return done(null, profile);
+//   }
+// ));
 
-// index page
-app.get('/', function (req, res) {
-  res.render('pages/index');
-});
+// passport.serializeUser(function (user, done) {
+//   done(null, user)
+// });
 
-// about page
-app.get('/about', function (req, res) {
-  res.render('pages/about');
-});
-
-
-// app.get('/', (req, res) => {
-//   res.send('<a href="/auth/google">Authentication with Google</a>');
+// passport.deserializeUser(function (user, done) {
+//   done(null, user)
 // });
 
 // app.get('/auth/google',
@@ -52,10 +53,22 @@ app.get('/about', function (req, res) {
 //   })
 // );
 
-app.get('/protected', isLoggedIn, (req, res) => {
-  console.log(req.user)
-  res.send(`Hello `);
+// app.get('/protected', isLoggedIn, (req, res) => {
+//   res.render('pages/protected');
+// });
+
+
+
+// index page
+app.get('/', function (req, res) {
+  res.render('pages/index');
 });
+
+// about page
+app.get('/protected', function (req, res) {
+  res.render('pages/protected');
+});
+
 
 app.get('/auth/google/failure', (req, res) => {
   res.send('Failed to authenticate..');
